@@ -1,7 +1,7 @@
 # necessary imports
 from docx import Document
 
-# The function below returns bolds the passed in paragraph
+# The function below bolds the passed in paragraph
 def bold_paragraph(paragraph):
     bold_para = paragraph.text
     paragraph = paragraph.clear()
