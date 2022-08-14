@@ -1,5 +1,7 @@
 # necessary imports
 from docx import Document
+import argparse
+import sys
 
 # The function below bolds the passed in paragraph
 def bold_paragraph(paragraph):
@@ -17,7 +19,11 @@ def delete_paragraph(paragraph):
 # and bolds interviewer text
 def clean_transcript(input_path):
     # open doc (object) w path relative to script
-    input_doc = Document(input_path)
+    try:
+        input_doc = Document(input_path)
+    except:
+        print("Input doc not found or invalid, try this format -> python rescript.py -f 'Example.docx'")
+        sys.exit(1)
 
     # interview_content denotes if the curr paragraph is interview content
     # if "Interviewer (" is seen (line 31)
@@ -42,8 +48,12 @@ def clean_transcript(input_path):
     # input_doc.save(input_path)
 
 def main():
+    # initialize input parser
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--file", help="file path")
+    args = parser.parse_args()
     # set input_path (in this case, the file is in the same folder as this script)
-    input_path = "Transcript Input File.docx"
+    input_path = args.file
     clean_transcript(input_path)
 
 # https://realpython.com/python-main-function/ -> this runs when you execute "python rescript.py"
