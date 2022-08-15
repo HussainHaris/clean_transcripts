@@ -40,7 +40,7 @@ def clean_transcript(input_path):
         elif "Interviewer (" in para.text:
             delete_paragraph(para)
             interview_content = True
-        elif "Participant Code" in para.text:
+        elif "MS-" in para.text:
             delete_paragraph(para)
 
     # save input doc (you may also specify the same input path to overwrite) (line 40)
