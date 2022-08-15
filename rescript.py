@@ -1,6 +1,7 @@
 # necessary imports
 from docx import Document
-import argparse
+from pathlib import Path
+import os
 import sys
 
 # The function below bolds the passed in paragraph
@@ -22,13 +23,14 @@ def clean_transcript(input_path):
     try:
         input_doc = Document(input_path)
     except:
-        print("Input doc not found or invalid, try this format -> python rescript.py -f 'Example.docx'")
+        print("Input doc not found, please place in input folder as .docx file")
         sys.exit(1)
 
     # interview_content denotes if the curr paragraph is interview content
     # if "Interviewer (" is seen (line 31)
     interview_content = False
 
+    # MS-01-AB
     # iterate through paragraphs in doc
     # https://python-docx.readthedocs.io/en/latest/api/text.html#paragraph-objects
     for para in input_doc.paragraphs:
@@ -44,17 +46,18 @@ def clean_transcript(input_path):
             delete_paragraph(para)
 
     # save input doc (you may also specify the same input path to overwrite) (line 40)
-    input_doc.save(input_path.split(".")[-2] + " Output.docx")
+    input_doc.save("output/" + input_path.split("/")[-1])
     # input_doc.save(input_path)
 
 def main():
-    # initialize input parser
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--file", help="file path")
-    args = parser.parse_args()
-    # set input_path (in this case, the file is in the same folder as this script)
-    input_path = args.file
-    clean_transcript(input_path)
+    # set input_path (in this case, the file is in the input folder)
+    source_dir = Path('input/')
+    files = source_dir.iterdir()
+    files = source_dir.glob('*.docx')
+
+    for file_name in files:
+        f = str(file_name)
+        clean_transcript(f)
 
 # https://realpython.com/python-main-function/ -> this runs when you execute "python rescript.py"
 if __name__ == "__main__":
