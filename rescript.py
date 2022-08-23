@@ -26,6 +26,16 @@ def clean_transcript(input_path):
         print("Input doc not found, please place in input folder as .docx file")
         sys.exit(1)
 
+    section = input_doc.sections[0]
+    header = section.header
+
+    for paragraph in header.paragraphs:
+        delete_paragraph(paragraph)
+    
+    header.add_paragraph("Transcription Date Complete:c")
+    header.add_paragraph("PPT Code: ")
+    header.add_paragraph("Transcriber Initials: ")
+
     # interview_content denotes if the curr paragraph is interview content
     # if "Interviewer (" is seen (line 31)
     interview_content = False
@@ -36,14 +46,16 @@ def clean_transcript(input_path):
     for para in input_doc.paragraphs:
         # cases bold the interview content, delete the interviewer line,
         # or delete the participant code line
-        if interview_content:
+        if "MS-" in para.text:
+            interview_content = False
+            for run in para.runs:
+                run.font.bold = False
+        elif interview_content:
             bold_paragraph(para)
             interview_content = False
         elif "Interviewer (" in para.text:
-            delete_paragraph(para)
+            #delete_paragraph(para)
             interview_content = True
-        elif "MS-" in para.text:
-            delete_paragraph(para)
 
     # save input doc (you may also specify the same input path to overwrite) (line 40)
     input_doc.save("output/" + input_path.split("/")[-1])
