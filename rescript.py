@@ -29,13 +29,6 @@ def clean_transcript(input_path):
     section = input_doc.sections[0]
     header = section.header
 
-    for paragraph in header.paragraphs:
-        delete_paragraph(paragraph)
-    
-    header.add_paragraph("Transcription Date Complete:c")
-    header.add_paragraph("PPT Code: ")
-    header.add_paragraph("Transcriber Initials: ")
-
     # interview_content denotes if the curr paragraph is interview content
     # if "Interviewer (" is seen (line 31)
     interview_content = False
